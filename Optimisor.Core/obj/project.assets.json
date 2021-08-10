@@ -24,6 +24,7 @@
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
+        "C:\\MyStuff\\source\\Optimisor\\NuGet.Config",
         "C:\\Users\\dmarshall\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -31,10 +32,7 @@
         "net5.0"
       ],
       "sources": {
-        "https://api.nuget.org/v3/index.json": {},
-        "https://hub24.pkgs.visualstudio.com/_packaging/App-Services/nuget/v3/index.json": {},
-        "https://hub24.pkgs.visualstudio.com/_packaging/Data-Services/nuget/v3/index.json": {},
-        "https://nuget.telerik.com/nuget": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net5.0": {
