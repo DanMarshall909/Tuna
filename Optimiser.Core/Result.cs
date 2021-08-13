@@ -1,14 +1,18 @@
-﻿namespace Optimiser.Core
+﻿using System;
+
+namespace Optimiser.Core
 {
     public class Result
     {
-        public Result(bool Success, int ElapsedTime)
+        public Result(bool success, TimeSpan elapsedTimeSpan, Exception exception = null)
         {
-            this.Success = Success;
-            this.ElapsedTime = ElapsedTime;
+            Success = success;
+            ElapsedTimeSpan = elapsedTimeSpan;
+            Exception = exception;
         }
 
         public bool Success { get; }
-        public int ElapsedTime { get; }
+        public TimeSpan ElapsedTimeSpan { get; }
+        public Exception Exception { get; }
     }
 }

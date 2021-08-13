@@ -8,12 +8,12 @@ namespace Optimiser.Core
         {
         }
 
-        public int Miliseconds { get; private set; }
+        public int TimeoutInMs { get; private set; }
 
         public Options WithTimeoutInMs(int miliseconds)
         {
             var newOptions = this.DeepClone();
-            newOptions.Miliseconds = miliseconds;
+            newOptions.TimeoutInMs = miliseconds;
 
             return  newOptions;
         }
