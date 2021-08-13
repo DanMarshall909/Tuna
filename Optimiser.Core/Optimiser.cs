@@ -8,11 +8,19 @@ namespace Optimiser.Core
 {
     public class Optimiser
     {
-        private Parameter[] parameters;
-        private Optimiser() { }
-        public Optimiser(Parameter[] parameters)
+        private readonly ITaskRunner taskRunner;
+        private readonly ParameterRange[] parameters;
+        private readonly Options options;
+
+        public Optimiser(ITaskRunner taskRunner, ParameterRange[] parameters, Options options)
         {
+            this.taskRunner = taskRunner;
             this.parameters = parameters;
+            this.options = options;
+        }
+        public Result Execute()
+        {
+            return taskRunner.Execute();
         }
     }
 }

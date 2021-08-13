@@ -1,6 +1,6 @@
 ﻿namespace Optimiser.Core
 {    
-    public class Parameter
+    public class ParameterRange
     {
 
     }
