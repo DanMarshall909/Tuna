@@ -9,7 +9,8 @@ namespace Optimiser.Tests
 		[Fact]
 		public void Initialise()
 		{
-            _ = new Core.Optimiser();
+			var parameters = new Core.Parameter [] { };
+            _ = new Core.Optimiser(parameters);
         }
 	}
 }

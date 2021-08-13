@@ -8,5 +8,11 @@ namespace Optimiser.Core
 {
     public class Optimiser
     {
+        private Parameter[] parameters;
+        private Optimiser() { }
+        public Optimiser(Parameter[] parameters)
+        {
+            this.parameters = parameters;
+        }
     }
 }
