@@ -16,11 +16,13 @@ namespace Optimiser.Tests
 		[Fact]
 		public void Execute_should_return_a_successfull_result_for_trivial_input()
         {
-			var runner = new Runner(new TrivialTaskRunner(), Array.Empty<ParameterDomain>(), new Options());
+            TrivialTaskRunner taskRunner = new TrivialTaskRunner();
+            var runner = new Runner(taskRunner, Array.Empty<ParameterDomain>(), new Options());
 
 			var result = runner.Execute();
 
-			Assert.True(result.Success);			
+			Assert.True(result.Success);						
+			Assert.True(taskRunner.IveBeenRun);			
 			Assert.True(result.ElapsedTimeSpan.Ticks > 0);
 		}
 
@@ -36,8 +38,11 @@ namespace Optimiser.Tests
 
 	class TrivialTaskRunner : TaskRunner
 	{
+        public bool IveBeenRun { get; set; } = false;
+
         public override void Task()
         {            
+			IveBeenRun = true;
         }
     }
 }
