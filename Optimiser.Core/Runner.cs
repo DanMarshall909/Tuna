@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Optimiser.Core
 {
-    public class Optimiser
+    public class Runner
     {
         private readonly TaskRunner taskRunner;
-        private readonly ParameterRange[] parameters;
+        private readonly ParameterDomain[] parameterDomains;
         private readonly Options options;
 
-        public Optimiser(TaskRunner taskRunner, ParameterRange[] parameters, Options options)
+        public Runner(TaskRunner taskRunner, ParameterDomain[] parameterDomains, Options options)
         {
             this.taskRunner = taskRunner;
-            this.parameters = parameters;
+            this.parameterDomains = parameterDomains;
             this.options = options;
         }
         public Result Execute()

@@ -8,19 +8,19 @@ namespace Optimiser.Tests
 	public class OptimiserTests
 	{
 		[Fact]
-		public void Optimiser_constructor_should_initialise()
+		public void Runner_constructor_should_initialise()
 		{
-            _ = new Core.Optimiser(new TrivialTaskRunner(), new ParameterRange[] { }, new Options());
+            _ = new Runner(new TrivialTaskRunner(), Array.Empty<ParameterDomain>(), new Options());
         }
 
 		[Fact]
 		public void Execute_should_return_a_successfull_result_for_trivial_input()
         {
-			var optimiser = new Core.Optimiser(new TrivialTaskRunner(), new ParameterRange[] { }, new Options());
+			var runner = new Runner(new TrivialTaskRunner(), Array.Empty<ParameterDomain>(), new Options());
 
-			var result = optimiser.Execute();
+			var result = runner.Execute();
 
-			Assert.Equal(true, result.Success);
+			Assert.True(result.Success);			
 			Assert.True(result.ElapsedTimeSpan.Ticks > 0);
 		}
 
