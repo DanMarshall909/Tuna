@@ -3,13 +3,13 @@ using System.Diagnostics;
 
 namespace Optimiser.Core
 {
-    public abstract class TaskRunner
+    public abstract class AbstractTaskRunner
     {
         public Result Result { get; private set; }
 
         public abstract void Task();
 
-        public void Execute()
+        public void Run()
         {
             var success = false;
             Exception exception = null;            

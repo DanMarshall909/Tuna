@@ -14,12 +14,19 @@ namespace Optimiser.Tests
         }
 
 		[Fact]
+		public void Runner_constructor_should_initialise_via_fluid_interface()
+		{
+            _ = new Runner(new TrivialTaskRunner());
+        }
+
+
+		[Fact]
 		public void Execute_should_return_a_successfull_result_for_trivial_input()
         {
             TrivialTaskRunner taskRunner = new TrivialTaskRunner();
             var runner = new Runner(taskRunner, Array.Empty<ParameterDomain>(), new Options());
 
-			var result = runner.Execute();
+			var result = runner.Run();
 
 			Assert.True(result.Success);						
 			Assert.True(taskRunner.IveBeenRun);			
@@ -36,7 +43,7 @@ namespace Optimiser.Tests
         }
 	}
 
-	class TrivialTaskRunner : TaskRunner
+	class TrivialTaskRunner : AbstractTaskRunner
 	{
         public bool IveBeenRun { get; set; } = false;
 
