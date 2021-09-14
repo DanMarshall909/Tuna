@@ -8,7 +8,7 @@ namespace Optimiser.Core
         {
         }
 
-        public int TimeoutInMs { get; private set; }
+        public int TimeoutInMs { get; internal set; }
 
         public Options WithTimeoutInMs(int miliseconds)
         {

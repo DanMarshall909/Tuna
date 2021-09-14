@@ -19,6 +19,15 @@ namespace Optimiser.Tests
             _ = new Runner(new TrivialTaskRunner());
         }
 
+		[Fact]
+		public void Runner_constructor_should_initialise_via_fluid_interface_and_add_options()
+		{
+            var runner = new Runner(new TrivialTaskRunner())
+				.WithHardTimeout(10);
+			
+			Assert.Equal(10, runner.Options.TimeoutInMs);
+        }
+
 
 		[Fact]
 		public void Execute_should_return_a_successfull_result_for_trivial_input()

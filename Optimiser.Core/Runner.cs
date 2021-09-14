@@ -8,25 +8,38 @@ namespace Optimiser.Core
 {
     public class Runner
     {
-        private readonly AbstractTaskRunner taskRunner;
-        private readonly ParameterDomain[] parameterDomains;
-        private readonly Options options;
+        internal readonly AbstractTaskRunner taskRunner;
+        internal readonly ParameterDomain[] parameterDomains;
 
-        public Runner(AbstractTaskRunner taskRunner) 
+        public Runner(AbstractTaskRunner taskRunner)
             : this(taskRunner, Array.Empty<ParameterDomain>(), new Options()) { }
-        
+
 
         public Runner(AbstractTaskRunner taskRunner, ParameterDomain[] parameterDomains, Options options)
         {
             this.taskRunner = taskRunner;
             this.parameterDomains = parameterDomains;
-            this.options = options;
+            this.Options = options;
         }
+
+        public Options Options { get; internal set; }
+
         public Result Run()
         {
             taskRunner.Run();
 
             return taskRunner.Result;
+        }
+    }
+
+    
+    public static class RunnerExtensionMethods
+    {
+        public static Runner WithHardTimeout(this Runner runner, int timeoutInMs)
+        {
+            runner.Options.TimeoutInMs = timeoutInMs;
+
+            return runner;
         }
     }
 }
