@@ -12,19 +12,19 @@ namespace Optimiser.Core
         internal readonly AbstractTaskRunner taskRunner;
 
         public Runner(AbstractTaskRunner taskRunner)
-            : this(taskRunner, Array.Empty<ParameterDomain>(), new Options()) { }
+            : this(taskRunner, Array.Empty<Parameter>(), new Options()) { }
 
 
-        public Runner(AbstractTaskRunner taskRunner, ParameterDomain[] parameterDomains, Options options)
+        public Runner(AbstractTaskRunner taskRunner, Parameter[] parameterDomains, Options options)
         {
             this.taskRunner = taskRunner;
-            this.ParameterDomains = parameterDomains;
-            this.Options = options;
+            Parameters = parameterDomains;
+            Options = options;
         }
 
         public Options Options { get; internal set; }
 
-        public ParameterDomain[] ParameterDomains { get; internal set; }
+        public Parameter[] Parameters { get; internal set; }
 
         public Result Run()
         {
@@ -43,12 +43,12 @@ namespace Optimiser.Core
 
             return newRunner;
         }
-        public static Runner WithParameter<T>(this Runner runner, string name)
+        public static Runner WithParameter<T>(this Runner runner, string name, params Interval<T>[] intervals) where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>
         {
             var newRunner = runner.DeepClone();            
-            newRunner.ParameterDomains = runner
-                .ParameterDomains
-                .Append(new ParameterDomain(name))
+            newRunner.Parameters = runner
+                .Parameters
+                .Append(new NumericParameter<T>(name, intervals))
                 .ToArray();
             
             return newRunner;
