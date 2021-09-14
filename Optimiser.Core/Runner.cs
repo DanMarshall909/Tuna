@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Force.DeepCloner;
 
 namespace Optimiser.Core
 {
     public class Runner
     {
         internal readonly AbstractTaskRunner taskRunner;
-        internal readonly ParameterDomain[] parameterDomains;
 
         public Runner(AbstractTaskRunner taskRunner)
             : this(taskRunner, Array.Empty<ParameterDomain>(), new Options()) { }
@@ -18,11 +18,13 @@ namespace Optimiser.Core
         public Runner(AbstractTaskRunner taskRunner, ParameterDomain[] parameterDomains, Options options)
         {
             this.taskRunner = taskRunner;
-            this.parameterDomains = parameterDomains;
+            this.ParameterDomains = parameterDomains;
             this.Options = options;
         }
 
         public Options Options { get; internal set; }
+
+        public ParameterDomain[] ParameterDomains { get; internal set; }
 
         public Result Run()
         {
@@ -31,15 +33,25 @@ namespace Optimiser.Core
             return taskRunner.Result;
         }
     }
-
     
     public static class RunnerExtensionMethods
     {
         public static Runner WithHardTimeout(this Runner runner, int timeoutInMs)
         {
-            runner.Options.TimeoutInMs = timeoutInMs;
+            var newRunner = runner.DeepClone();            
+            newRunner.Options.TimeoutInMs = timeoutInMs;
 
-            return runner;
+            return newRunner;
+        }
+        public static Runner WithParameter<T>(this Runner runner, string name)
+        {
+            var newRunner = runner.DeepClone();            
+            newRunner.ParameterDomains = runner
+                .ParameterDomains
+                .Append(new ParameterDomain(name))
+                .ToArray();
+            
+            return newRunner;
         }
     }
 }

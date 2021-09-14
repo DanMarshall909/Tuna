@@ -28,6 +28,16 @@ namespace Optimiser.Tests
 			Assert.Equal(10, runner.Options.TimeoutInMs);
         }
 
+		[Fact]
+		public void Runner_constructor_should_initialise_via_fluid_interface_and_add_Parameter()
+		{
+            var runner = new Runner(new TrivialTaskRunner())
+				.WithHardTimeout(10)
+				.WithParameter<decimal>("Number of rows to insert");
+			
+			Assert.True(runner.ParameterDomains[0].Name == "Number of rows to insert");
+        }
+
 
 		[Fact]
 		public void Execute_should_return_a_successfull_result_for_trivial_input()
