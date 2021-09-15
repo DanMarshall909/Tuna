@@ -2,11 +2,6 @@
 
 namespace Optimiser.Core
 {
-    public abstract class Parameter
-    {
-        public string Name { get; protected set; }
-        public abstract object CurrentValue { get; }
-    }
 
     public class NumericParameter<T> : Parameter where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>
     {

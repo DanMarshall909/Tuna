@@ -39,15 +39,17 @@ namespace Optimiser.Tests
         }
 
         [Fact]
-        public void Runner_constructor_should_initialise_via_fluid_interface_and_add_Parameter_with_intervals()
+        public void Runner_can_add_Parameter_with_intervals()
         {
             var runner = new Runner(new TrivialTaskRunner())
                 .WithHardTimeout(10)
                 .WithParameter("Number of rows to insert"
                     , new Interval<decimal>("[1,100)")
-                    , new Interval<decimal>("(200,500]"));
+                    , new Interval<decimal>("(200,500]"))
+                .WithParameter<InsertMethod>("Insert method");
 
             Assert.Equal("Number of rows to insert", runner.Parameters[0].Name);
+            Assert.Equal("Insert method", runner.Parameters[1].Name);        
             Assert.Equal(200m, ((NumericParameter<decimal>)runner.Parameters[0]).Intervals[1].Start.Value);
         }
 
@@ -73,6 +75,8 @@ namespace Optimiser.Tests
             Assert.Equal(10, options.WithTimeoutInMs(10).TimeoutInMs);
         }
     }
+
+    public enum InsertMethod { BulkInsert, IndividualInserts }
 
     class TrivialTaskRunner : AbstractTaskRunner
     {

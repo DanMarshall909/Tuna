@@ -53,5 +53,17 @@ namespace Optimiser.Core
             
             return newRunner;
         }
+
+        
+        public static Runner WithParameter<T>(this Runner runner, string name) where T : Enum      
+        {
+            var newRunner = runner.DeepClone();            
+            newRunner.Parameters = runner
+                .Parameters
+                .Append(new EnumParameter<T>(name))
+                .ToArray();
+            
+            return newRunner;
+        }
     }
 }
