@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimiser.Core", "Optimiser.Core\Optimiser.Core.csproj", "{52EBD8D1-F90E-498C-938A-5CE75237FB1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tuna.Core", "Tuna.Core\Tuna.Core.csproj", "{52EBD8D1-F90E-498C-938A-5CE75237FB1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimiser.Tests", "Optimiser.Tests\Optimiser.Tests.csproj", "{3AF86E4D-6AA9-43D2-9ADC-3E976CCDAC00}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tuna.Tests", "Tuna.Tests\Tuna.Tests.csproj", "{3AF86E4D-6AA9-43D2-9ADC-3E976CCDAC00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Optimiser.Core
+namespace Tuna.Core
 {
     public class EnumParameter<T> : Parameter where T : Enum
     {

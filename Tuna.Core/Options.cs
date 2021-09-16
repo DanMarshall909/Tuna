@@ -1,6 +1,6 @@
 ﻿using Force.DeepCloner;
 
-namespace Optimiser.Core
+namespace Tuna.Core
 {
     public class Options
     {

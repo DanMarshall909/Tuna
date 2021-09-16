@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Optimiser.Core
+namespace Tuna.Core
 {
     public struct Interval<T> where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>
     {

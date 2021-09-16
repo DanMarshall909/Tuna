@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Optimiser.Core\Optimiser.Core.csproj" />
+    <ProjectReference Include="..\Tuna.Core\Tuna.Core.csproj" />
   </ItemGroup>
 
 </Project>

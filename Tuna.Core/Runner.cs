@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Force.DeepCloner;
 
-namespace Optimiser.Core
+namespace Tuna.Core
 {
     public class Runner
     {

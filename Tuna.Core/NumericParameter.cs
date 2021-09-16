@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Optimiser.Core
+namespace Tuna.Core
 {
 
     public class NumericParameter<T> : Parameter where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>

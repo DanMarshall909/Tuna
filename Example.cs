@@ -18,7 +18,7 @@
 
 API examples
 
-var optimiser = new Optimiser(new MyTaskRunner())
+var Tuna = new Tuna(new MyTaskRunner())
 	.WithHardTimeout(500)
 	.WithParameter<decimal>("Number of rows to insert")
 		.WithInterval<decimal>(Interval.Open, 1m, Interval.Closed, 50m)
@@ -26,7 +26,7 @@ var optimiser = new Optimiser(new MyTaskRunner())
 	.WithParameter<InsertMethod>("Insert method")
 		.WithParameterOptions<InsertMethod>(InsertMethod.BulkInsert, InsertMethod.IndividualInserts);
 
-var result = await optimiser.RunAsync();
+var result = await Tuna.RunAsync();
 
 ....
 

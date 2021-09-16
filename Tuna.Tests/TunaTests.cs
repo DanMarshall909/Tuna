@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Optimiser.Core;
+using Tuna.Core;
 using Xunit;
 
-namespace Optimiser.Tests
+namespace Tuna.Tests
 {
-    public class OptimiserTests
+    public class TunaTests
     {
         [Fact]
         public void Runner_constructor_should_initialise()
@@ -53,6 +53,8 @@ namespace Optimiser.Tests
             Assert.Equal(200m, ((NumericParameter<decimal>)runner.Parameters[0]).Intervals[1].Start.Value);
         }
 
+        enum InsertMethod { BulkInsert, IndividualInserts }
+
         [Fact]
         public void Execute_should_return_a_successfull_result_for_trivial_input()
         {
@@ -74,17 +76,12 @@ namespace Optimiser.Tests
             Assert.Equal(0, options.TimeoutInMs);
             Assert.Equal(10, options.WithTimeoutInMs(10).TimeoutInMs);
         }
-    }
 
-    public enum InsertMethod { BulkInsert, IndividualInserts }
-
-    class TrivialTaskRunner : AbstractTaskRunner
-    {
-        public bool IveBeenRun { get; set; } = false;
-
-        public override void Task()
+        class TrivialTaskRunner : AbstractTaskRunner
         {
-            IveBeenRun = true;
+            public bool IveBeenRun { get; set; }
+
+            public override void Task() => IveBeenRun = true;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Optimiser.Core
+namespace Tuna.Core
 {
     public abstract class AbstractTaskRunner
     {

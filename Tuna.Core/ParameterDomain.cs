@@ -1,4 +1,4 @@
-﻿namespace Optimiser.Core
+﻿namespace Tuna.Core
 {
     public class ParameterDomain
     {
