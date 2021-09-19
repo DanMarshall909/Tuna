@@ -9,7 +9,7 @@ namespace Tuna.Core
 
         public abstract void Task();
 
-        public void Run()
+        public void RunTask()
         {
             var success = false;
             Exception exception = null;            

@@ -11,7 +11,7 @@ namespace Tuna.Core
             Exception = exception;
         }
 
-        public bool Success { get; }
+        public bool Success { get; } = false;
         public TimeSpan ElapsedTimeSpan { get; }
         public Exception Exception { get; }
     }

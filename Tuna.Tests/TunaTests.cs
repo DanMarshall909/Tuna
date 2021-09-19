@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Tuna.Core;
 using Xunit;
 
@@ -10,7 +10,7 @@ namespace Tuna.Tests
         [Fact]
         public void Runner_constructor_should_initialise()
         {
-            _ = new Runner(new TrivialTaskRunner(), Array.Empty<Parameter>(), new Options());
+            _ = new Runner(new TrivialTaskRunner(), new List<Parameter>(), new Options());
         }
 
         [Fact]
@@ -59,13 +59,52 @@ namespace Tuna.Tests
         public void Execute_should_return_a_successfull_result_for_trivial_input()
         {
             TrivialTaskRunner taskRunner = new TrivialTaskRunner();
-            var runner = new Runner(taskRunner, Array.Empty<Parameter>(), new Options());
+            var runner = new Runner(taskRunner, new List<Parameter>(), new Options());
 
-            var result = runner.Run();
+            runner.Run();
 
+            Result result = runner.Runs[0].Result;
             Assert.True(result.Success);
             Assert.True(taskRunner.IveBeenRun);
             Assert.True(result.ElapsedTimeSpan.Ticks > 0);
+        }
+
+        class TrivialTaskRunner : AbstractTaskRunner
+        {
+            public bool IveBeenRun { get; set; }
+            public override void Task() => IveBeenRun = true;
+        }
+
+        
+        [Fact]
+        public void Execute_should_record_results_for_each_run()
+        {
+            var taskRunner = new TrivialTaskRunner();
+            var runner = new Runner(taskRunner, new List<Parameter>(), new Options());
+
+            runner.Run();
+            runner.Run();
+                        
+            Assert.True(runner.Runs[1].Result.Success);
+        }        
+
+        private const string Doh = "D'oh";        
+        [Fact]
+        public void Execute_should_capture_exceptions()
+        {
+            var taskRunner = new ExceptionThrowingTaskRunner();
+            var runner = new Runner(taskRunner, new List<Parameter>(), new Options());
+
+            runner.Run();
+
+            var result = runner.Runs[0].Result;
+            Assert.False(result.Success);
+            Assert.Equal(Doh, result.Exception.Message);
+        }        
+
+        private class ExceptionThrowingTaskRunner : AbstractTaskRunner
+        {
+            public override void Task() => throw new Exception(Doh);
         }
 
         [Fact]
@@ -75,13 +114,6 @@ namespace Tuna.Tests
 
             Assert.Equal(0, options.TimeoutInMs);
             Assert.Equal(10, options.WithTimeoutInMs(10).TimeoutInMs);
-        }
-
-        class TrivialTaskRunner : AbstractTaskRunner
-        {
-            public bool IveBeenRun { get; set; }
-
-            public override void Task() => IveBeenRun = true;
         }
     }
 }
