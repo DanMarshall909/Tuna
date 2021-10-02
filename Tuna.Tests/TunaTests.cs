@@ -7,88 +7,47 @@ namespace Tuna.Tests
 {
     public class TunaTests
     {
-        [Fact]
-        public void Runner_constructor_should_initialise()
-        {
-            _ = new Runner(new TrivialTaskRunner(), new List<Parameter>(), new Options());
-        }
-
-        [Fact]
-        public void Runner_constructor_should_initialise_via_fluid_interface()
-        {
-            _ = new Runner(new TrivialTaskRunner());
-        }
-
-        [Fact]
-        public void Runner_constructor_should_initialise_via_fluid_interface_and_add_options()
-        {
-            var runner = new Runner(new TrivialTaskRunner())
-                .WithHardTimeout(10);
-
-            Assert.Equal(10, runner.Options.TimeoutInMs);
-        }
-
-        [Fact]
-        public void Runner_constructor_should_initialise_via_fluid_interface_and_add_Parameter()
-        {
-            var runner = new Runner(new TrivialTaskRunner())
-                .WithHardTimeout(10)
-                .WithParameter<decimal>("Number of rows to insert");
-
-            Assert.True(runner.Parameters[0].Name == "Number of rows to insert");
-        }
-
-        [Fact]
-        public void Runner_can_add_Parameter_with_intervals()
-        {
-            var runner = new Runner(new TrivialTaskRunner())
-                .WithHardTimeout(10)
-                .WithParameter("Number of rows to insert"
-                    , new Interval<decimal>("[1,100)")
-                    , new Interval<decimal>("(200,500]"))
-                .WithParameter<InsertMethod>("Insert method");
-
+		[Fact]
+        public void Parameters_are_stored_in_correct_order()
+		{
+			Runner runner = GetNumericTestRunnerWth2ParametersHardTimeoutAndIntervals(new TrivialTaskRunner());
             Assert.Equal("Number of rows to insert", runner.Parameters[0].Name);
-            Assert.Equal("Insert method", runner.Parameters[1].Name);        
+            Assert.Equal("Insert method", runner.Parameters[1].Name);
+		}
+		
+		[Fact]
+        public void Start_value_of_second_interval_is_saved_correctly()
+		{
+			Runner runner = GetNumericTestRunnerWth2ParametersHardTimeoutAndIntervals(new TrivialTaskRunner());            
             Assert.Equal(200m, ((NumericParameter<decimal>)runner.Parameters[0]).Intervals[1].Start.Value);
-        }
-
-        enum InsertMethod { BulkInsert, IndividualInserts }
-
-        [Fact]
-        public void Execute_should_return_a_successfull_result_for_trivial_input()
-        {
-            TrivialTaskRunner taskRunner = new TrivialTaskRunner();
-            var runner = new Runner(taskRunner, new List<Parameter>(), new Options());
-
-            runner.Run();
-
+		}
+		
+		[Fact]
+        public void Timeout_parameter_is_added_correctly()
+		{
+			Runner runner = GetNumericTestRunnerWth2ParametersHardTimeoutAndIntervals(new TrivialTaskRunner());
+            Assert.Equal(10, runner.Options.TimeoutInMs);
+		}
+		
+		[Fact]
+        public void Task_time_is_recorded()
+		{
+			Runner runner = GetNumericTestRunnerWth2ParametersHardTimeoutAndIntervals(new TrivialTaskRunner());            
             Result result = runner.Runs[0].Result;
-            Assert.True(result.Success);
-            Assert.True(taskRunner.IveBeenRun);
             Assert.True(result.ElapsedTimeSpan.Ticks > 0);
-        }
-
-        class TrivialTaskRunner : AbstractTaskRunner
-        {
-            public bool IveBeenRun { get; set; }
-            public override void Task() => IveBeenRun = true;
-        }
-
-        
-        [Fact]
-        public void Execute_should_record_results_for_each_run()
-        {
-            var taskRunner = new TrivialTaskRunner();
-            var runner = new Runner(taskRunner, new List<Parameter>(), new Options());
-
+		}
+		
+		[Fact]
+        public void Runs_fail_if_timeout_is_exceeded()
+		{
+			var runner = GetNumericTestRunnerWth2ParametersHardTimeoutAndIntervals(new TrivialTaskRunner());
+            
             runner.Run();
             runner.Run();
-                        
-            Assert.True(runner.Runs[1].Result.Success);
-        }        
 
-        private const string Doh = "D'oh";        
+            Assert.All(runner.Runs, r => Assert.True(r.Result.Success));
+		}
+
         [Fact]
         public void Execute_should_capture_exceptions()
         {
@@ -99,12 +58,7 @@ namespace Tuna.Tests
 
             var result = runner.Runs[0].Result;
             Assert.False(result.Success);
-            Assert.Equal(Doh, result.Exception.Message);
-        }        
-
-        private class ExceptionThrowingTaskRunner : AbstractTaskRunner
-        {
-            public override void Task() => throw new Exception(Doh);
+            Assert.Equal(ExceptionThrowingTaskRunner.ExceptionMessage, result.Exception.Message);
         }
 
         [Fact]
@@ -115,5 +69,36 @@ namespace Tuna.Tests
             Assert.Equal(0, options.TimeoutInMs);
             Assert.Equal(10, options.WithTimeoutInMs(10).TimeoutInMs);
         }
+        
+        class ExceptionThrowingTaskRunner : AbstractTaskRunner
+        {
+            public const string ExceptionMessage = "D'oh";
+        
+            public override void Task() => throw new Exception(ExceptionMessage);
+        }
+        
+        static Runner GetNumericTestRunnerWth2ParametersHardTimeoutAndIntervals(TrivialTaskRunner taskRunner)
+        {
+            var runner = new Runner(taskRunner)
+                .WithHardTimeout(10)
+                .WithParameter("Number of rows to insert"
+                    , new Interval<decimal>("[1,100)")
+                    , new Interval<decimal>("(200,500]"))
+                .WithParameter<TrivialTaskRunner.InsertMethod>("Insert method");
+
+            runner.Run();
+            runner.Run();
+            return runner;
+        }
+
+
+        class TrivialTaskRunner : AbstractTaskRunner
+        {
+            public enum InsertMethod { BulkInsert, IndividualInserts }
+            public bool IveBeenRun { get; private set; } = false;
+            public override void Task() => IveBeenRun = true;
+        }
+
+
     }
 }

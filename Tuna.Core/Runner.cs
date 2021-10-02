@@ -7,30 +7,32 @@ namespace Tuna.Core
 {
     public class Runner
     {
-        internal readonly AbstractTaskRunner taskRunner;
-
         public Runner(AbstractTaskRunner taskRunner)
             : this(taskRunner, new List<Parameter>(), new Options()) { }
 
 
-        public Runner(AbstractTaskRunner taskRunner, List<Parameter> parameterDomains, Options options)
+        public Runner(AbstractTaskRunner taskRunner, IList<Parameter> parameterDomains, Options options)
         {
-            this.taskRunner = taskRunner;
+            this.TaskRunner = taskRunner;
             Parameters = parameterDomains;
             Options = options;
         }
 
         public Options Options { get; internal set; }
 
-        public List<Parameter> Parameters { get; internal set; }
+        public IList<Parameter> Parameters { get; internal set; }
 
-        public List<Run> Runs { get;  set; } = new List<Run>();
+        public Dictionary<string, Parameter> ParametersByName => Parameters.ToDictionary(x => x.Name, x => x);
+
+        public IList<Run> Runs { get; set; } = new List<Run>();
+
+        public AbstractTaskRunner TaskRunner { get; }
 
         public void Run()
         {
-            taskRunner.RunTask();
+            TaskRunner.RunTask();
 
-            Runs.Add(new Run(taskRunner.Result));
+            Runs.Add(new Run(TaskRunner.Result));
         }
     }
 
@@ -54,7 +56,7 @@ namespace Tuna.Core
             return newRunner;
         }
 
-        public static Runner WithParameter<T>(this Runner runner, string name, List<Interval<T>> intervals) where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>
+        public static Runner WithParameter<T>(this Runner runner, string name, IList<Interval<T>> intervals) where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>
         {
             var newRunner = runner.DeepClone();
             newRunner.Parameters.Add(new NumericParameter<T>(name, intervals));
