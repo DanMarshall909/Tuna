@@ -1,21 +1,22 @@
 ﻿using Force.DeepCloner;
+using System;
 
 namespace Tuna.Core
 {
     public class Options
     {
-        public Options()
-        {
-        }
+        private static readonly TimeSpan UnsetTimeout = new(0);
 
-        public int TimeoutInMs { get; internal set; }
+        public TimeSpan Timeout { get; internal set; } = UnsetTimeout;
 
-        public Options WithTimeoutInMs(int miliseconds)
+        public Options WithTimeout(TimeSpan timeout)
         {
             var newOptions = this.DeepClone();
-            newOptions.TimeoutInMs = miliseconds;
+            newOptions.Timeout = timeout;
 
-            return  newOptions;
+            return newOptions;
         }
+
+        internal bool IsTimeoutExceeded(TimeSpan timeSpan) => Timeout != UnsetTimeout && timeSpan > Timeout;
     }
 }

@@ -13,7 +13,7 @@ namespace Tuna.Core
 
         public Runner(AbstractTaskRunner taskRunner, IList<Parameter> parameterDomains, Options options)
         {
-            this.TaskRunner = taskRunner;
+            TaskRunner = taskRunner;
             Parameters = parameterDomains;
             Options = options;
         }
@@ -30,7 +30,7 @@ namespace Tuna.Core
 
         public void Run()
         {
-            TaskRunner.RunTask();
+            TaskRunner.RunTask(this);
 
             Runs.Add(new Run(TaskRunner.Result));
         }
@@ -48,10 +48,10 @@ namespace Tuna.Core
 
     public static class RunnerExtensionMethods
     {
-        public static Runner WithHardTimeout(this Runner runner, int timeoutInMs)
+        public static Runner WithTimeout(this Runner runner, TimeSpan timeout)
         {
             var newRunner = runner.DeepClone();
-            newRunner.Options.TimeoutInMs = timeoutInMs;
+            newRunner.Options.Timeout = timeout;
 
             return newRunner;
         }
