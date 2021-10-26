@@ -20,22 +20,22 @@ namespace Tuna.Tests
         [Fact]
         public void Start_value_of_second_interval_is_saved_correctly()
         {
-            Runner runner = GetNumericTestRunnerWth2ParametersTimeoutAndIntervalsAnd2Runs(new TrivialTaskRunner());
+            var runner = GetNumericTestRunnerWth2ParametersTimeoutAndIntervalsAnd2Runs(new TrivialTaskRunner());
             Assert.Equal(200m, ((NumericParameter<decimal>)runner.Parameters[0]).Intervals[1].Start.Value);
         }
 
         [Fact]
         public void Timeout_parameter_is_added_correctly()
         {
-            Runner runner = GetNumericTestRunnerWth2ParametersTimeoutAndIntervalsAnd2Runs(new TrivialTaskRunner());
+            var runner = GetNumericTestRunnerWth2ParametersTimeoutAndIntervalsAnd2Runs(new TrivialTaskRunner());
             Assert.Equal(10, runner.Options.Timeout.TotalMilliseconds);
         }
 
         [Fact]
         public void Task_time_is_recorded()
         {
-            Runner runner = GetNumericTestRunnerWth2ParametersTimeoutAndIntervalsAnd2Runs(new TrivialTaskRunner());
-            Result result = runner.Runs[0].Result;
+            var runner = GetNumericTestRunnerWth2ParametersTimeoutAndIntervalsAnd2Runs(new TrivialTaskRunner());
+            var result = runner.Runs[0].Result;
             Assert.True(result.ElapsedTimeSpan.Ticks > 0);
         }
 
@@ -43,7 +43,6 @@ namespace Tuna.Tests
         public void Runs_fail_if_timeout_is_exceeded()
         {
             var runner = new Runner(new TaskRunnerThatExceeds1msPerRun()).WithTimeout(TimeSpan.FromMilliseconds(1));
-
             runner.Run();
 
             var result = runner.Runs[0].Result;
